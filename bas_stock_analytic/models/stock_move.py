@@ -102,6 +102,15 @@ class StockMove(models.Model):
             }
         return rslt
 
+    def _prepare_move_line_vals(self, quantity=None, reserved_quant=None):
+        vals = super(StockMove, self)._prepare_move_line_vals(quantity, reserved_quant)
+        if self.analytic_distribution:
+            analytic_distribution = self.analytic_distribution
+            vals.update({'analytic_distribution': analytic_distribution,
+        })
+        return vals
+
+
 
 
 
