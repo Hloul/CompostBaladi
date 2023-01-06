@@ -19,15 +19,15 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
 
-    def _prepare_procurement_values(self,group_id=False):
+    def _prepare_procurement_values(self,group_id):
         res = super(SaleOrderLine,self)._prepare_procurement_values(group_id=group_id)
-        _logger.info('bas: self %s',self)
-        _logger.info('bas: analytic distribution %s',self.analytic_distribution)
+        _logger.info('bas _prepare_procurement_values : self %s',self)
+        _logger.info('bas _prepare_procurement_values : analytic distribution %s',self.analytic_distribution)
 
         res.update({
                 'analytic_distribution': self.analytic_distribution,
             })
-        _logger.info('bas: res %s',res)
+        _logger.info('bas _prepare_procurement_values : res %s',res)
         return res
     
 

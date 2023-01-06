@@ -75,7 +75,8 @@ class ProcurementRule(models.Model):
             if field in values:
                 move_values[field] = values.get(field)
 
-        _logger.info('bas: self %s',self)
+        _logger.info('bas stock_rule: self %s',self)
+        _logger.info('bas stock_rule: values %s',values)
         _logger.info('bas stock_rule: _get_stock_move_values move_values: %s',move_values)
 
         return move_values

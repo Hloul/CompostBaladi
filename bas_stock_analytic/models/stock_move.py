@@ -100,17 +100,18 @@ class StockMove(models.Model):
                 'debit': diff_amount < 0 and -diff_amount or 0,
                 'account_id': price_diff_account.id,
             }
-        _logger.info('bas: self %s',self)
+        _logger.info('bas stock.move:_generate_valuation_lines_data self : %s',self)
         _logger.info('bas stock.move:_generate_valuation_lines_data rslt : %s',rslt)
         return rslt
 
     def _prepare_move_line_vals(self, quantity=None, reserved_quant=None):
         vals = super(StockMove, self)._prepare_move_line_vals(quantity, reserved_quant)
+        _logger.info('bas stock_move: prepare_move_line_vals: self %s',self)
+        _logger.info('bas stock_move: prepare_move_line_vals: self.analytic_distribution %s',self.analytic_distribution)
         if self.analytic_distribution:
             analytic_distribution = self.analytic_distribution
             vals.update({'analytic_distribution': analytic_distribution,
         })
-        _logger.info('bas: self %s',self)
         _logger.info('bas stock_move:prepare_move_line_vals : vals %s',vals)
         return vals
 
