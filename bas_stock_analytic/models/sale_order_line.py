@@ -19,7 +19,7 @@ class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
 
-    def _prepare_procurement_values(self,group_id):
+    def _prepare_procurement_values(self,group_id=False):
         res = super(SaleOrderLine,self)._prepare_procurement_values(group_id=group_id)
         _logger.info('bas: self %s',self)
         _logger.info('bas: analytic distribution %s',self.analytic_distribution)
