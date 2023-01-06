@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 # Part of BAS. See LICENSE file for full copyright and licensing details.
+
+import logging
 from odoo import fields, models, _
 from odoo.exceptions import UserError
 from dateutil.relativedelta import relativedelta
@@ -7,10 +9,8 @@ from odoo.tools.float_utils import float_is_zero, float_compare
 from datetime import datetime
 from collections import namedtuple, OrderedDict, defaultdict
 
-#class AccountAnalyticLineIn(models.Model):
-#    _inherit = "account.analytic.line"
-#
-#    tag_ids  = fields.Many2many('account.analytic.plan', string= 'Tag')
+_logger = logging.getLogger(__name__)
+
 
 
 class StockMove(models.Model):
@@ -100,6 +100,8 @@ class StockMove(models.Model):
                 'debit': diff_amount < 0 and -diff_amount or 0,
                 'account_id': price_diff_account.id,
             }
+        _logger.info('bas: self %s',self)
+        _logger.info('bas stock.move:_generate_valuation_lines_data rslt : %s',rslt)
         return rslt
 
     def _prepare_move_line_vals(self, quantity=None, reserved_quant=None):
@@ -108,6 +110,8 @@ class StockMove(models.Model):
             analytic_distribution = self.analytic_distribution
             vals.update({'analytic_distribution': analytic_distribution,
         })
+        _logger.info('bas: self %s',self)
+        _logger.info('bas stock_move:prepare_move_line_vals : vals %s',vals)
         return vals
 
 

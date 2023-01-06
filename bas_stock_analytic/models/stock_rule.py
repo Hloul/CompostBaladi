@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 # Part of BAS. See LICENSE file for full copyright and licensing details.
+import logging
 from odoo import fields, models, _
 from odoo.exceptions import UserError
 from dateutil.relativedelta import relativedelta
@@ -7,7 +8,7 @@ from odoo.tools.float_utils import float_is_zero, float_compare
 from datetime import datetime
 from collections import namedtuple, OrderedDict, defaultdict
 
-
+_logger = logging.getLogger(__name__)
 
 
 class ProcurementRule(models.Model):
@@ -73,6 +74,10 @@ class ProcurementRule(models.Model):
         for field in self._get_custom_move_fields():
             if field in values:
                 move_values[field] = values.get(field)
+
+        _logger.info('bas: self %s',self)
+        _logger.info('bas stock_rule: _get_stock_move_values move_values: %s',move_values)
+
         return move_values
     
     
