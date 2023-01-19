@@ -1,5 +1,5 @@
 {
-    'name': "Analytic Account Distributer",
+    'name': "Analytic Account Distributor",
 
     'summary': """
         Distribute Analytic Account to all lines in the account move

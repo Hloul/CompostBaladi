@@ -6,7 +6,6 @@ class AccountMoveLines(models.Model):
 
     def _get_analytic_distribution(self):
         for record in self:
-            analytic_plans = self.env['account.analytic.plan'].search([])
             account_analytic_distribution_models = self.env['account.analytic.distribution.model'].search([])
             for account_analytic_distribution_model in account_analytic_distribution_models:
                 length = len(account_analytic_distribution_model.account_prefix)
@@ -20,8 +19,14 @@ class AccountMoveLines(models.Model):
                                 }
                             })
                         else:
-                            if str(key) not in record.analytic_distribution:
-                                print('key not in analytic_distribution')
+                            analytic_plan_set = False
+                            analytic_plan = self.env['account.analytic.account'].search([('id', '=', key)]).plan_id.id
+                            if analytic_plan:
+                                analytic_accounts = self.env['account.analytic.account'].search([('plan_id', '=', analytic_plan)])
+                                for analytic_account in analytic_accounts:
+                                    if str(analytic_account.id) in record.analytic_distribution:
+                                        analytic_plan_set = True
+                            if str(key) not in record.analytic_distribution and not analytic_plan_set:
                                 values = record.analytic_distribution
                                 values[str(key)] = value
                                 record.write({
