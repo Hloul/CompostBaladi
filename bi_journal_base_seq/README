@@ -1,0 +1,7 @@
+
+Version 15.0.0.1 : (03-12-21)
+		- Solved sequence assignment issue.
+
+Version 15.0.0.2 : (10-01-21)
+		- Solved user access issue.
+15.0.0.3 ==>fixed issue of invoice sequence when we move invoice in reset to draft and after post that invoice.
