@@ -18,7 +18,7 @@ class PurchaseOrder(models.Model):
 
     @api.onchange('analytic_distribution')
     def onchange_analytic_distribution(self):
-        for line in self.order_line.filtered(lambda r: r.display_type in 'product'):
+        for line in self.order_line.filtered(lambda r: r.display_type = ''):
             line.update({
                 'analytic_distribution': self.analytic_distribution
             })
