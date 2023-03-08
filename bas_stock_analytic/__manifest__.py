@@ -13,7 +13,10 @@
     'website': 'https://www.bas.com',
     'depends': ['base','sale_management','stock','analytic',"stock_account",'purchase'],
     'data': [
-                "views/stock_move_views.xml"
+                "views/stock_move_views.xml",
+                "views/purchase_order_view.xml",
+                "views/sale_order_view.xml"
+
             ],
 	'qweb': [ ],
     "license":'OPL-1',
