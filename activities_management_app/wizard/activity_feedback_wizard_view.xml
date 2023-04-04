@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="activity_feedback_wizard_views_mass" model="ir.ui.view">
+        <field name="name">activity.feedback.wizard.form</field>
+        <field name="model">activity.feedback.wizard</field>
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <group>
+                        <field name="feedback"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="action_done" string="Done" type="object"
+                        class="btn-primary"/>
+                        or
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_done_mass_activity" model="ir.actions.act_window">
+        <field name="name">Mass Done Activity</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">activity.feedback.wizard</field>
+        <field name="view_id" ref="activity_feedback_wizard_views_mass"/>
+        <field name="binding_model_id" ref="model_mail_activity" />
+        <field name="binding_view_types">list</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
