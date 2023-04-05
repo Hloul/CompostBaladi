@@ -1,4 +1,0 @@
-id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_activity_tag,access_activity_tag,model_activity_tag,,1,1,1,1
-access_activity_feedback_wizard,activity_feedback_wizard,model_activity_feedback_wizard,,1,1,1,1
-access_activity_cancel_wizard,activity_cancel_wizard,model_activity_cancel_wizard,,1,1,1,1
