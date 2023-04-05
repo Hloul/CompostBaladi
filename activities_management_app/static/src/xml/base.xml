@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates id="template" xml:space="preserve">
+    <t t-name="activities_management_app.Dashboard">
+        <div class="o_dashboards" style="height: 100%;">
+			<div class="o_helpdesk_dashboard o_website_dashboard" style="height: 100%;">
+				<div class="o_dashboard_common" style="height: 100%;">
+					<div class="container o_dashboard_stage" style="background-color:#e8e8e8;margin-top: 20px;margin-bottom: 20px;"/>
+				</div>
+			</div>
+		</div>
+    </t>
+    <t t-name="activities_management_app.dashboard_view">
+        <div class="row">
+
+        </div>
+        <br/>
+        <h1><center>Welcome To <span t-esc="widget.user_id"/></center></h1>
+        <br/>
+        <div class="row">
+            <t t-if="widget.counter_all_activity">
+                 <div class="column" style="cursor: pointer;">
+					<div class="card-view" style="color:black;background-color:#0c8b91;">
+                        <strong>
+                            <i style="float: left;font-size: 24px;margin-top: 2px; color: blue;"/> <!--class="fa fa-plus" -->
+                            <span>All</span>
+                        </strong>
+                        <span style="float: right;"><span t-esc="widget.count"/></span>
+                         <h3 class='name'>Activity</h3>
+                    </div>
+                </div>
+            </t>
+            <t t-if="widget.counter_overdue_activity">
+                 <div class="column" style="cursor: pointer;">
+                    <div class="card-view" style="background-color:red;color:black;">
+                        <strong>
+                            <i style="float: left;font-size: 24px;margin-top: 2px; color: blue;"/> <!--class="fa fa-home"-->
+                            <span>Overdue</span>
+                        </strong>
+                        <span style="float: right;"><span t-esc="widget.overdue"/></span>
+                         <h3 class='name'>Activity</h3>
+                    </div>
+                </div>
+            </t>
+            <t t-if="widget.counter_today_activity">
+                <div class="column" style="cursor: pointer;">
+                    <div class="card-view" style="background-color:#f7de3b;color:black;">
+                        <strong>
+                            <i style="float: left;font-size: 24px;margin-top: 2px; color: blue;"/> <!--class="fa fa-home"-->
+                            <span>Today</span>
+                        </strong>
+                        <span style="float: right;"><span t-esc="widget.today"/></span>
+                         <h3 class='name'>Activity</h3>
+                    </div>
+                </div>
+            </t>
+            <t t-if="widget.counter_plan_activity">
+                 <div class="column" style="cursor: pointer;">
+                    <div class="card-view" style="background-color:#32a852;color:black;">
+                        <strong>
+                            <i style="float: left;font-size: 24px;margin-top: 2px; color: blue;"/> <!--class="fa fa-file" -->
+                            <span>Planned</span>
+                        </strong>
+                        <span style="float: right;"><span t-esc="widget.planned"/></span>
+                         <h3 class='name'>Activity</h3>
+                    </div>
+                </div>
+            </t>
+            <t t-if="widget.counter_done_activity">
+                <div class="column" style="cursor: pointer;">
+                    <div class="card-view" style="background-color:blue;color:white;">
+                        <strong>
+                            <i style="float: left;font-size: 24px;margin-top: 2px; color: blue;"/> <!--class="fa fa-fw fa-remove"-->
+                            <span>Done</span>
+                        </strong>
+                        <span style="float: right;"><span t-esc="widget.done"/></span>
+                         <h3 class='name' style="color:white;">Activity</h3>
+                    </div>
+                </div>
+            </t>
+            <t t-if="widget.counter_cancel_activity">
+                <div class="column" style="cursor: pointer;">
+                    <div class="card-view" style="background-color:black;color:white;">
+                        <strong>
+                            <i style="float: left;font-size: 24px;margin-top: 2px; color: blue;"/> <!--class="fa fa-fw fa-remove"-->
+                            <span>Cancel</span>
+                        </strong>
+                        <span style="float: right;"><span t-esc="widget.cancel"/></span>
+                         <h3 class='name' style="color:white;">Activity</h3>
+                    </div>
+                </div>
+            </t>
+		</div>
+        <br/>
+<!--        <div class="row">-->
+
+<!--            -->
+<!--        </div>-->
+        <br/>
+        <br/>
+<!--        <h1><center>Vehicle</center></h1>-->
+        <br/>
+       <t t-if="widget.data_table_all_activity">
+            <div class="row">
+            <div class="col-xs-11" style="padding: 0 10px;width:96%;">
+					<div class="card" style="height">
+						<h3 class="model" style="position:absolute;left: 40%;">All Activity</h3><br/>
+<!--                        <span style="position:absolute;left: 40%;">All</span>-->
+						<div class="view scrollbar" id="scrollbar" style="height:120px;">
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th style="text-align:center;">Document Name</th>
+                                        <th style="text-align:center;">Activity Type</th>
+                                        <th style="text-align:center;">User</th>
+                                        <th style="text-align:center;">Supervisor</th>
+                                        <th style="text-align:center;">Date Deadline</th>
+                                        <th style="text-align:center;">Summary</th>
+                                        <th style="text-align:center;">Date Done</th>
+                                        <th style="text-align:center;">Feedback</th>
+                                        <th style="text-align:center;">State</th>
+									</tr>
+								</thead>
+								<tbody>
+									<t t-foreach="widget.data" t-as="veh">
+										<tr>
+											<td style="text-align:center;"><t t-esc="veh.res_name"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.type"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.user_id"/> </td>
+                                            <td style="text-align:center;"><t t-esc="veh.supervisor"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.date_deadline"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.summary"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.date_done"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.feedback"/></td>
+											<td><span class="badge badge-pill badge-info" style="font-size: 80%;padding: 5px 5px;background-color: #ffc107;" t-esc="veh.state"/></td>
+										</tr>
+									</t>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+        </div>
+       </t>
+        <t t-if="widget.data_table_done_activity">
+            <br/>
+            <div class="row">
+            <div class="col-xs-11" style="padding: 0 10px;width:96%;">
+                <div class="card" style="height">
+                    <h3 class="model" style="position:absolute;left: 40%;">Done Activity</h3><br/>
+<!--                        <span style="position:absolute;left: 40%;">All</span>-->
+                    <div class="view scrollbar" id="scrollbar" style="height:120px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">Document Name</th>
+                                    <th style="text-align:center;">Activity Type</th>
+                                    <th style="text-align:center;">User</th>
+                                    <th style="text-align:center;">Supervisor</th>
+                                    <th style="text-align:center;">Date Deadline</th>
+                                    <th style="text-align:center;">Summary</th>
+                                    <th style="text-align:center;">Date Done</th>
+                                    <th style="text-align:center;">Feedback</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="widget.data" t-as="veh">
+                                    <t t-if="veh.state == 'done'">
+                                        <tr>
+                                            <td style="text-align:center;"><t t-esc="veh.res_name"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.type"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.user_id"/> </td>
+                                            <td style="text-align:center;"><t t-esc="veh.supervisor"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.date_deadline"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.summary"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.date_done"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.feedback"/></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </t>
+
+        <t t-if="widget.data_table_plan_activity">
+
+            <br/>
+            <div class="row">
+            <div class="col-xs-11" style="padding: 0 10px;width:96%;">
+                <div class="card" style="height">
+                    <h3 class="model" style="position:absolute;left: 40%;">Planned Activity</h3><br/>
+<!--                        <span style="position:absolute;left: 40%;">All</span>-->
+                    <div class="view scrollbar" id="scrollbar" style="height:120px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">Document Name</th>
+                                    <th style="text-align:center;">Activity Type</th>
+                                    <th style="text-align:center;">User</th>
+                                    <th style="text-align:center;">Supervisor</th>
+                                    <th style="text-align:center;">Date Deadline</th>
+                                    <th style="text-align:center;">Summary</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="widget.data" t-as="veh">
+                                    <t t-if="veh.state == 'planned'">
+                                        <tr>
+                                            <td style="text-align:center;"><t t-esc="veh.res_name"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.type"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.user_id"/> </td>
+                                            <td style="text-align:center;"><t t-esc="veh.supervisor"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.date_deadline"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.summary"/></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </t>
+        <t t-if="widget.data_table_today_activity">
+            <br/>
+            <div class="row">
+            <div class="col-xs-11" style="padding: 0 10px;width:96%;">
+                <div class="card" style="height">
+                    <h3 class="model" style="position:absolute;left: 40%;">Today Activity</h3><br/>
+<!--                        <span style="position:absolute;left: 40%;">All</span>-->
+                    <div class="view scrollbar" id="scrollbar" style="height:120px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">Document Name</th>
+                                    <th style="text-align:center;">Activity Type</th>
+                                    <th style="text-align:center;">User</th>
+                                    <th style="text-align:center;">Supervisor</th>
+                                    <th style="text-align:center;">Date Deadline</th>
+                                    <th style="text-align:center;">Summary</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="widget.data" t-as="veh">
+                                    <t t-if="veh.state == 'today'">
+                                        <tr>
+                                            <td style="text-align:center;"><t t-esc="veh.res_name"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.type"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.user_id"/> </td>
+                                            <td style="text-align:center;"><t t-esc="veh.supervisor"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.date_deadline"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.summary"/></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </t>
+        <t t-if="widget.data_table_overdue_activity">
+            <br/>
+            <div class="row">
+            <div class="col-xs-11" style="padding: 0 10px;width:96%;">
+                <div class="card" style="height">
+                    <h3 class="model" style="position:absolute;left: 40%;">Overdue Activity</h3><br/>
+<!--                        <span style="position:absolute;left: 40%;">All</span>-->
+                    <div class="view scrollbar" id="scrollbar" style="height:120px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">Document Name</th>
+                                    <th style="text-align:center;">Activity Type</th>
+                                    <th style="text-align:center;">User</th>
+                                    <th style="text-align:center;">Supervisor</th>
+                                    <th style="text-align:center;">Date Deadline</th>
+                                    <th style="text-align:center;">Summary</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="widget.data" t-as="veh">
+                                    <t t-if="veh.state == 'overdue'">
+                                        <tr>
+                                            <td style="text-align:center;"><t t-esc="veh.res_name"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.type"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.user_id"/> </td>
+                                            <td style="text-align:center;"><t t-esc="veh.supervisor"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.date_deadline"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.summary"/></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </t>
+
+        <t t-if="widget.data_table_cancel_activity">
+            <br/>
+            <div class="row">
+            <div class="col-xs-11" style="padding: 0 10px;width:96%;">
+                <div class="card" style="height">
+                    <h3 class="model" style="position:absolute;left: 40%;">Cancel Activity</h3><br/>
+<!--                        <span style="position:absolute;left: 40%;">All</span>-->
+                    <div class="view scrollbar" id="scrollbar" style="height:120px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:center;">Document Name</th>
+                                    <th style="text-align:center;">Activity Type</th>
+                                    <th style="text-align:center;">User</th>
+                                    <th style="text-align:center;">Supervisor</th>
+                                    <th style="text-align:center;">Date Deadline</th>
+                                    <th style="text-align:center;">Summary</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="widget.data" t-as="veh">
+                                    <t t-if="veh.state == 'cancel'">
+                                        <tr>
+                                            <td style="text-align:center;"><t t-esc="veh.res_name"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.type"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.user_id"/> </td>
+                                            <td style="text-align:center;"><t t-esc="veh.supervisor"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.date_deadline"/></td>
+                                            <td style="text-align:center;"><t t-esc="veh.summary"/></td>
+                                        </tr>
+                                    </t>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </t>
+
+
+
+
+    </t>
+
+</templates>
