@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_attachments_manager" model="ir.ui.view">
+        <field name="name">res.config.settings.view.attachments.manager</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="81"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('settings')]" position="inside">
+                <div class="app_settings_block" data-string="Attachments Manager" string="Attachments Manager" data-key="attachments_manager" groups="attachments_center.group_dms_manager">
+                    <h2>Attachments manager</h2>
+                    <div class="row mt16 o_settings_container" name="attachments_manager_setting_container">
+                        <div class="col-12 col-lg-12 o_setting_box" title="Setup Attachments Manager on your server">
+
+                            <h4>Display</h4>
+                            <div class="o_setting_left_pane">
+                                <field name="am_kanban_info"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="am_kanban_info"/>
+                                <div class="text-muted">
+                                    Hide/show kanban additional info attachments
+                                </div>
+
+                                <div class="text-muted">
+                                    <a href="https://youtu.be/XaFvU2ROQ14" class="oe_link" target="_blank">
+                                        <i class="fa fa-arrow-right"></i> YouTube video of the difference
+                                    </a>
+                                </div>
+                            </div>
+
+                            <h4 style="margin-top: 30px">Webcam</h4>
+
+                            <div class="content-group mt16 col-4">
+                                <label for="am_webcam_width" class="col-6 col-lg-6 o_light_label"/>
+                                <field name="am_webcam_width" class="col-2"/>
+                            </div>
+
+                            <div class="content-group mt16 col-4">
+                                <label for="am_webcam_height" class="col-6 col-lg-6 o_light_label"/>
+                                <field name="am_webcam_height" class="col-2"/>
+                            </div>
+
+
+
+                            <h4 style="margin-top: 30px">Compress images</h4>
+
+                            <div class="o_setting_left_pane">
+                                <field name="am_compress_jpeg"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <label for="am_compress_jpeg" class="col-6 col-lg-6 o_light_label"/>
+                                <div class="text-muted">
+                                    Compress jpeg for save disk space
+                                </div>
+                            </div>
+                            <div attrs="{'invisible':[('am_compress_jpeg','=',False)]}">
+                                <div class="content-group mt16">
+                                    <label for="am_compress_jpeg_quality" class="col-6 col-lg-6 o_light_label"/>
+                                </div>
+                                <field name="am_compress_jpeg_quality"/>
+                                <div class="text-muted">
+                                    Not zip - 100 
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

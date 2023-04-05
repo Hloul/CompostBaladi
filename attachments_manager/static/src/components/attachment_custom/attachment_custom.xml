@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="mail.AttachmentSlider" t-inherit="mail.AttachmentCard" t-inherit-mode="extension" owl="1">
+        <xpath expr="//div[contains(@class,'o_AttachmentCard')]" position="attributes">
+            <!-- Hide background color -->
+            <attribute name="class">o_AttachmentCard  o-has-card-details d-flex rounded</attribute>
+            <!-- text bottom and length not more 100px because icon 90x90 size -->
+            <attribute name="style">display: flex;flex-direction: column;width: 100px;</attribute>
+        </xpath>
+
+        <!-- Hide delete/download icons because will use context menu -->
+        <xpath expr="//div[contains(@class,'o_AttachmentCard_aside')]" position="replace"/>
+
+        <!-- Big icons attachments -->
+        <xpath expr="//div[contains(@class,'o_AttachmentCard_image')]" position="attributes">
+            <attribute name="style">width: 90px !important;height: 90px !important;</attribute>
+        </xpath>
+
+
+        <xpath expr="//div[contains(@class,'o_AttachmentCard_image')]" position="inside">
+            <div class="o_AttachmentImage d-flex position-relative flex-shrink-0" t-att-class="{
+                        'o-isUploading': attachmentCard.attachment.isUploading,
+                    }" t-att-title="attachmentCard.attachment.displayName ? attachmentCard.attachment.displayName : undefined" t-att-data-id="attachmentCard.attachment.localId" tabindex="0" aria-label="View image" role="menuitem" t-on-click="attachmentCard.onClickImage" t-att-data-mimetype="attachmentCard.attachment.mimetype" t-attf-style="width: 90px; height: 90px">
+                <!-- Add icons for attachments -->
+                <t t-if="attachmentCard.attachment.tag_ids">
+                    <t t-foreach="attachmentCard.attachment.tag_ids" t-as="tag" t-key="attachment.id">
+                        <a class="o_field_many2manytags o_field_widget d-flex mt-auto" style="position:absolute;">
+                            <div t-attf-class="badge badge-pill o_tag_color_{{(tag[0] % 11) + 1}}">
+                                <b>
+                                    <span class="o_badge_text">
+                                        <t t-esc="tag[1]"/>
+                                    </span>
+                                </b>
+                            </div>
+                        </a>
+                    </t>
+                </t>
+                <t t-if="attachmentCard.attachment.public or attachment.type === 'url'">
+                    <span class="fa fa-1x fa-chain attachments-manager-public"/>
+                </t>
+                <t t-if="attachmentCard.attachment.url and attachment.url.indexOf('google.com') != -1">
+                    <span class="fa fa-1x attachments-manager-public" style="right:30px;background-image: url(/attachments_manager/static/description/gdrive.svg); background-repeat: no-repeat;background-color: transparent;"/>
+                </t>
+                <t t-if="attachmentCard.attachment.url and attachment.url.indexOf('1drv.ms') != -1">
+                    <span class="fa fa-1x attachments-manager-public" style="right:30px;background-image: url(/attachments_manager/static/description/onedrive.svg); background-repeat: no-repeat;background-color: transparent;"/>
+                </t>
+                <t t-if="attachmentCard.attachment.url and attachment.url.indexOf('dropbox.com') != -1">
+                    <span class="fa fa-1x attachments-manager-public" style="right:30px;background-image: url(/attachments_manager/static/description/dropbox.svg); background-repeat: no-repeat;background-color: transparent;"/>
+                </t>
+                <t t-if="attachmentCard.attachment.is_favorite">
+                    <span class="fa fa-1x fa-heart attachments-manager-public" style="top: 0px;color: red;font-size: 20px;background-color: transparent;opacity:0.8"/>
+                </t>
+
+                <!-- Add on hover delete/dowload button -->
+                <t t-if="attachmentCard.attachment.isUploading">
+                    <div class="o_AttachmentImageUploading position-absolute top-0 bottom-0 start-0 end-0 d-flex align-items-center justify-content-center" title="Uploading">
+                        <i class="fa fa-spin fa-spinner"/>
+                    </div>
+                </t>
+                <div class="o_AttachmentImage_imageOverlay position-absolute top-0 bottom-0 start-0 end-0 p-2 text-white opacity-0 opacity-100-hover d-flex align-items-end flax-wrap flex-column">
+                    <!-- <div class="o_AttachmentImage_action o_AttachmentImage_actionUnlink btn btn-sm btn-dark rounded opacity-75 opacity-100-hover" t-att-class="{'o-pretty': attachmentCard.attachmentList.composerViewOwner}" tabindex="0" aria-label="Context menu" role="menuitem" t-ref="contextMenu" title="Context menu">
+                        <i class="fa fa-th-large"/>
+                    </div> -->
+                    <div t-if="attachmentCard.attachment.isDeletable" class="o_AttachmentImage_action o_AttachmentImage_actionUnlink btn btn-sm btn-dark rounded opacity-75 opacity-100-hover" t-att-class="{'o-pretty': attachmentCard.attachmentList.composerViewOwner}" tabindex="0" aria-label="Remove" role="menuitem" t-on-click="attachmentCard.onClickUnlink" title="Remove">
+                        <i class="fa fa-trash"/>
+                    </div>
+                    <div class="o_AttachmentImage_action o_AttachmentImage_actionDownload btn btn-sm btn-dark rounded opacity-75 opacity-100-hover mt-auto" t-on-click="(ev) => this.onClickDownload(ev)" title="Download">
+                        <i class="fa fa-download"/>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+
+
+        <!-- <xpath expr="//div[contains(@class,'o_AttachmentCard_image')]" position="after">
+            <t t-if="session.am_kanban_info">
+                <div class="AttachmentKanbanInfo" style="display:flex;flex-direction: column;max-width: 150px;min-width: 150px;overflow: hidden;white-space: nowrap;" t-on-click="toggleSidebar">
+                    <div class="o_field_many2one_avatar o_clickable_m2o_avatar o_field_widget">
+                        <img t-attf-src="/web/image/res.users/{{attachment.create_uid ? attachment.create_uid[0] : 0}}/image_128" class="o_m2o_avatar"/>
+                        <t t-if="attachment.create_uid">
+                            <span>
+                                <t t-esc='attachment.create_uid[1]'/>
+                            </span>
+                        </t>
+                    </div>
+                    <span>
+                        <t t-esc='attachment.file_size'/>
+                    </span>
+                    <span>
+                        <t t-esc='attachment.create_date'/>
+                    </span>
+                    <div style="margin-top:5px;display: flex;flex-direction: row-reverse;">
+                        <t t-if="attachment.public or attachment.type === 'url'">
+                            <span style="position: inherit;" class="fa fa-1x fa-chain attachments-manager-public"/>
+                        </t>
+                        <t t-if="attachment.url and attachment.url.indexOf('google.com') != -1">
+                            <span class="fa fa-1x fa-chain attachments-manager-public" style="color: transparent;position: inherit;right:30px;background-image: url(/attachments_manager/static/description/gdrive.svg); background-repeat: no-repeat;background-color: transparent;"/>
+                        </t>
+                        <t t-if="attachment.url and attachment.url.indexOf('1drv.ms') != -1">
+                            <span class="fa fa-1x fa-chain attachments-manager-public" style="color: transparent;position: inherit;right:30px;background-image: url(/attachments_manager/static/description/onedrive.svg); background-repeat: no-repeat;background-color: transparent;"/>
+                        </t>
+                        <t t-if="attachment.url and attachment.url.indexOf('dropbox.com') != -1">
+                            <span class="fa fa-1x fa-chain attachments-manager-public" style="color: transparent;position: inherit;right:30px;background-image: url(/attachments_manager/static/description/dropbox.svg); background-repeat: no-repeat;background-color: transparent;"/>
+                        </t>
+                        <t t-if="attachment.is_favorite">
+                            <span class="fa fa-1x fa-heart attachments-manager-public" style="position: inherit;top: 0px;color: red;font-size: 20px;background-color: transparent;opacity:0.8"/>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </xpath> -->
+        <xpath expr="//div[contains(@class,'o_AttachmentCard')]" position="inside">
+                <t t-if="state.urlPreview">
+                    <div class="split-am right-am">
+                        <div class="centered-am">
+                            <a class="close-button-split-am" href="#" t-on-click="_onCloseSplitScreenPreview">Close</a>
+                            <iframe t-att-src="state.urlPreview" style="width:100%;height:100%"></iframe>
+                        </div>
+                    </div>
+                </t>
+        </xpath>
+    </t>
+
+
+</templates>
