@@ -56,26 +56,26 @@ class AccountMove(models.Model):
 				super(AccountMove, self)._compute_name()
 
 	def write(self,vals):
-            for rec in self:
-		if rec.is_draft == False:
-			if 'state' in vals:
-				if vals['state'] in ('posted'):
-					if rec.journal_id.type in ('sale','purchase'):
-						if rec.move_type in ('out_invoice', 'in_invoice','out_receipt','in_receipt'):
-							if not rec.journal_id.bi_sequence_id:
-								raise ValidationError('Add Sequence In Journal')
-							else:
-								seq = rec.journal_id.bi_sequence_id._next()
-								vals['name'] = seq
-								rec.journal_id.sudo().write({'bi_sequence_next_number':rec.env['ir.sequence'].search([('id', '=', rec.journal_id.bi_sequence_id.id)]).number_next_actual})
-						elif rec.move_type in ('out_refund', 'in_refund'):
-							if not rec.journal_id.bi_refund_sequence_id:
-								raise ValidationError('Add Refund/Credit Note Sequence In Journal')
-							else:
-								seq = rec.journal_id.bi_refund_sequence_id._next()
-								vals['name'] = seq
-								rec.journal_id.sudo().write({'bi_refund_sequence_next_number':rec.env['ir.sequence'].search([('id', '=', rec.journal_id.bi_refund_sequence_id.id)]).number_next_actual})
-				elif vals['state'] in ('draft','cancel'):
-					if rec.journal_id.type in ('sale','purchase'):
-    					        self.name = rec.name
-            return super(AccountMove, self).write(vals)
+		for rec in self:
+			if rec.is_draft == False:
+				if 'state' in vals:
+					if vals['state'] in ('posted'):
+						if rec.journal_id.type in ('sale','purchase'):
+							if rec.move_type in ('out_invoice', 'in_invoice','out_receipt','in_receipt'):
+								if not rec.journal_id.bi_sequence_id:
+									raise ValidationError('Add Sequence In Journal')
+								else:
+									seq = rec.journal_id.bi_sequence_id._next()
+									vals['name'] = seq
+									rec.journal_id.sudo().write({'bi_sequence_next_number':rec.env['ir.sequence'].search([('id', '=', rec.journal_id.bi_sequence_id.id)]).number_next_actual})
+							elif rec.move_type in ('out_refund', 'in_refund'):
+								if not rec.journal_id.bi_refund_sequence_id:
+									raise ValidationError('Add Refund/Credit Note Sequence In Journal')
+								else:
+									seq = rec.journal_id.bi_refund_sequence_id._next()
+									vals['name'] = seq
+									rec.journal_id.sudo().write({'bi_refund_sequence_next_number':rec.env['ir.sequence'].search([('id', '=', rec.journal_id.bi_refund_sequence_id.id)]).number_next_actual})
+					elif vals['state'] in ('draft','cancel'):
+						if rec.journal_id.type in ('sale','purchase'):
+    							self.name = rec.name
+		return super(AccountMove, self).write(vals)
