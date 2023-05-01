@@ -184,6 +184,9 @@
             <field name="arch" type="xml">
                 <xpath expr="//button[@name='action_confirm']" position="after">
                     <button name="button_approve" string="Approve" attrs="{'invisible':[('is_current_approver', '=', False)]}" type="object"/>
+                    <button name="action_cancel" type="object" string="Cancel" attrs="{'invisible': [('state', 'not in', ['draft', 'sent','sale'])]}" data-hotkey="z"/>
+                    <button name="action_draft" states="cancel" type="object" string="Set to Quotation" data-hotkey="w"/>
+
 <!--                        <attribute name="groups"></attribute>-->
 <!--                        <attribute name="attrs">{'invisible':['|', ('is_current_approver', '=', False)]}</attribute>-->
                 </xpath>
