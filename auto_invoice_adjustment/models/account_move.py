@@ -15,7 +15,8 @@ class AccountMove(models.Model):
             rec.lbp_currency_id = lbp.id
 
     def adjust_invoice(self):
-        if self.move_type == 'out_invoice':
+        lbp = self.env['res.currency'].search([('name', '=', 'LBP')])
+        if self.move_type == 'out_invoice' and self.currency_id.id != lbp.id:
             lbp = self.env['res.currency'].search([('name', '=', 'LBP')])
             lls = self.env['res.currency'].search([('name', '=', 'LLS')])
             tax = self.env['account.tax'].search([('name', '=', 'Sales VAT @ LBP')])
@@ -26,6 +27,7 @@ class AccountMove(models.Model):
                 tax_line = tax_line[0]
                 tax_account = tax_line.account_id
                 original_tax = self.line_ids.filtered(lambda l: l.account_id.id == tax_account.id).credit
+                original_tax_amount_currency = self.line_ids.filtered(lambda l: l.account_id.id == tax_account.id).amount_currency
                 # adjust line 1
                 lines = [(0, 0, {
                     'name': 'Remove VAT USD',
@@ -34,19 +36,20 @@ class AccountMove(models.Model):
                     'credit': original_tax,
                     'debit': 0,
                     'currency_id': self.currency_id.id,
+                    'amount_currency': original_tax_amount_currency,
                     'partner_id': self.partner_id.id,
                 })]
                 # adjust line 2
                 lls_tax_amount_conversion_rate = self.env['res.currency']._get_conversion_rate(
                     self.currency_id, lls, self.env.company, self.invoice_date or self.date
                 )
-                lls_tax_amount = lls_tax_amount_conversion_rate * original_tax
+                lls_tax_amount = lls_tax_amount_conversion_rate * original_tax_amount_currency
                 new_tax_amount_conversion_rate = self.env['res.currency']._get_conversion_rate(
-                    lbp, self.currency_id, self.env.company, self.invoice_date or self.date
+                    lbp, self.env.company.currency_id, self.env.company, self.invoice_date or self.date
                 )
                 new_tax_amount = lls_tax_amount * new_tax_amount_conversion_rate
                 self.llc_currency_rate = lls_tax_amount_conversion_rate
-                self.lls_tax_amount = lls_tax_amount
+                self.lls_tax_amount = abs(lls_tax_amount)
                 lines.append((0, 0, {
                     'name': 'Put VAT in LBP',
                     'account_id': receivable_account.id,
