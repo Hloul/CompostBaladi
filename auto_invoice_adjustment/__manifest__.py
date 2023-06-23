@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'multi_currency_account_reports', 'sale', 'account'],
+    'depends': ['base', 'multi_currency_account_reports', 'sale', 'purchase', 'account'],
 
     # always loaded
     'data': [

@@ -17,7 +17,6 @@ class AccountMove(models.Model):
     def adjust_invoice(self):
         lbp = self.env['res.currency'].search([('name', '=', 'LBP')])
         if self.move_type == 'out_invoice' and self.currency_id.id != lbp.id:
-            lbp = self.env['res.currency'].search([('name', '=', 'LBP')])
             lls = self.env['res.currency'].search([('name', '=', 'LLS')])
             tax = self.env['account.tax'].search([('name', '=', 'Sales VAT @ LBP')])
             receivable_line = self.line_ids.filtered(lambda l: l.display_type == 'payment_term')
@@ -59,6 +58,59 @@ class AccountMove(models.Model):
                     'currency_id': lbp.id,
                     'partner_id': self.partner_id.id,
                     'amount_currency': lls_tax_amount
+                }))
+                adjust_move = self.env['account.move'].with_context(check_move_validity=False, adjust=True).create({
+                    'partner_id': self.partner_id.id,
+                    'invoice_date': self.invoice_date,
+                    'date': self.date,
+                    'move_type': 'entry',
+                    'line_ids': lines,
+                })
+                self.write({
+                    'adjust_move_id': adjust_move.id
+                })
+        if self.move_type == 'in_invoice' and self.currency_id.id != lbp.id:
+            lls = self.env['res.currency'].search([('name', '=', 'LLS')])
+            tax = self.env['account.tax'].search([('name', '=', 'Purchase VAT @ LBP')])
+            payable_line = self.line_ids.filtered(lambda l: l.display_type == 'payment_term')
+            tax_line = self.line_ids.filtered(lambda l: l.display_type == 'tax')
+            if payable_line and tax_line:
+                payable_account = payable_line.account_id
+                tax_line = tax_line[0]
+                tax_account = tax_line.account_id
+                original_tax = self.line_ids.filtered(lambda l: l.account_id.id == tax_account.id).debit
+                original_tax_amount_currency = self.line_ids.filtered(lambda l: l.account_id.id == tax_account.id).amount_currency
+                # adjust line 1
+                lines = [(0, 0, {
+                    'name': 'Remove VAT USD',
+                    'account_id': payable_account.id,
+                    'tax_ids': [(6, 0, tax.ids)],
+                    'credit': 0,
+                    'debit': original_tax,
+                    'currency_id': self.currency_id.id,
+                    'amount_currency': original_tax_amount_currency,
+                    'partner_id': self.partner_id.id,
+                })]
+                # adjust line 2
+                lls_tax_amount_conversion_rate = self.env['res.currency']._get_conversion_rate(
+                    self.currency_id, lls, self.env.company, self.invoice_date or self.date
+                )
+                lls_tax_amount = lls_tax_amount_conversion_rate * original_tax_amount_currency
+                new_tax_amount_conversion_rate = self.env['res.currency']._get_conversion_rate(
+                    lbp, self.env.company.currency_id, self.env.company, self.invoice_date or self.date
+                )
+                new_tax_amount = lls_tax_amount * new_tax_amount_conversion_rate
+                self.llc_currency_rate = lls_tax_amount_conversion_rate
+                self.lls_tax_amount = abs(lls_tax_amount)
+                lines.append((0, 0, {
+                    'name': 'Put VAT in LBP',
+                    'account_id': payable_account.id,
+                    'tax_ids': [(6, 0, tax.ids)],
+                    'credit': new_tax_amount,
+                    'debit': 0,
+                    'currency_id': lbp.id,
+                    'partner_id': self.partner_id.id,
+                    'amount_currency': -lls_tax_amount
                 }))
                 adjust_move = self.env['account.move'].with_context(check_move_validity=False, adjust=True).create({
                     'partner_id': self.partner_id.id,
