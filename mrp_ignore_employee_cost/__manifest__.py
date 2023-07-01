@@ -20,7 +20,7 @@
     'version': '1',
 
     # any module necessary for this one to work correctly
-    'depends': ['mrp'],
+    'depends': ['mrp', 'mrp_workorder_hr_account'],
 
     # always loaded
     'data': [],
