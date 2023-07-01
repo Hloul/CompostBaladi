@@ -57,7 +57,7 @@ class MrpCostStructure(models.AbstractModel):
                         wo.duration,
                         CASE WHEN wo.costs_hour = 0.0 THEN wc.costs_hour ELSE wo.costs_hour END AS costs_hour,
                         currency_table.rate,
-                        SUM(t.duration/60.0 * COALESCE(emp.hourly_cost,0) END) as employee_total_cost
+                        SUM(t.duration/60.0 * COALESCE(emp.hourly_cost,0)) as employee_total_cost
                     FROM mrp_workcenter_productivity t
                     LEFT JOIN mrp_workorder wo ON (wo.id = t.workorder_id)
                     LEFT JOIN hr_employee emp ON (emp.id = t.employee_id)
