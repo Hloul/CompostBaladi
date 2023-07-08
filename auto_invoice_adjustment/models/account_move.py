@@ -20,7 +20,8 @@ class AccountMove(models.Model):
             lls = self.env['res.currency'].search([('name', '=', 'LLS')])
             receivable_line = self.line_ids.filtered(lambda l: l.display_type == 'payment_term')
             tax_line = self.line_ids.filtered(lambda l: l.display_type == 'tax')
-            tax = self.env['account.tax'].search([('name','=',tax_line.name + ' @ Sayrafa')])
+            if tax_line: 
+               tax = self.env['account.tax'].search([('name','=',tax_line.name + ' @ Sayrafa')])
             if receivable_line and tax_line:
                 receivable_account = receivable_line.account_id
                 tax_line = tax_line[0]
@@ -74,7 +75,8 @@ class AccountMove(models.Model):
             lls = self.env['res.currency'].search([('name', '=', 'LLS')])
             payable_line = self.line_ids.filtered(lambda l: l.display_type == 'payment_term')
             tax_line = self.line_ids.filtered(lambda l: l.display_type == 'tax')
-            tax = self.env['account.tax'].search([('name','=',tax_line.name + ' @ Sayrafa')])
+            if tax_line: 
+                tax = self.env['account.tax'].search([('name','=',tax_line.name + ' @ Sayrafa')])
             if payable_line and tax_line:
                 payable_account = payable_line.account_id
                 tax_line = tax_line[0]
