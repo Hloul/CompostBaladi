@@ -3,7 +3,7 @@
     <data>
         <template inherit_id="account.document_tax_totals" id="document_tax_totals_adjust">
             <xpath expr="//tr[hasclass('o_total')]" position="replace">
-                <t t-if="not o.adjust_move_id">
+                <t t-if="doc or (o and not o.adjust_move_id)">
                     <tr class="border-black o_total">
                         <t t-if="has_rounding"><td>Total</td></t>
                         <t t-else=""><td><strong>Total</strong></td></t>
