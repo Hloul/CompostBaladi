@@ -31,7 +31,7 @@ class AccountMoveLine(models.Model):
   
                 if from_currency.id == to_currency.id:
                     rec.debit2 = abs(rec.amount_currency)
-                    _logger.debug ('from curr = to currency debit2 %s',debit2)
+                    _logger.debug ('from curr = to currency debit2 %s',rec.debit2)
 
                 else:
                     if main_currency.id == from_currency.id:
@@ -40,7 +40,7 @@ class AccountMoveLine(models.Model):
                         )
                         rec.debit2 = rec.debit * conversion_rate
                         _logger.debug ('main curr = from curr and conversion rate %s',conversion_rate)
-                        _logger.debug ('debit2 %s',debit2)
+                        _logger.debug ('debit2 %s',rec.debit2)
 
                     else:
                         conversion_rate = self.env['res.currency']._get_conversion_rate(
@@ -48,7 +48,7 @@ class AccountMoveLine(models.Model):
                         )
                         rec.debit2 = rec.debit * conversion_rate
                         _logger.debug ('main curr <> from curr and conversion rate %s',conversion_rate)
-                        _logger.debug ('debit2 %s',debit2)
+                        _logger.debug ('debit2 %s',rec.debit2)
 
 
 
