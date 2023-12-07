@@ -24,14 +24,14 @@ class AccountMoveLine(models.Model):
                 from_currency = rec.currency_id
                 to_currency = self.env.company.currency_id2
 
-                _logger.debug ('debit on rec %s',rec)
-                _logger.debug ('main currency %s',main_currency)
-                _logger.debug ('from currency %s',from_currency)
-                _logger.debug ('to currency %s',to_currency)
+                _logger.info ('debit on rec %s',rec)
+                _logger.info ('main currency %s',main_currency)
+                _logger.info ('from currency %s',from_currency)
+                _logger.info ('to currency %s',to_currency)
   
                 if from_currency.id == to_currency.id:
                     rec.debit2 = abs(rec.amount_currency)
-                    _logger.debug ('from curr = to currency debit2 %s',rec.debit2)
+                    _logger.info ('from curr = to currency debit2 %s',rec.debit2)
 
                 else:
                     if main_currency.id == from_currency.id:
@@ -39,16 +39,16 @@ class AccountMoveLine(models.Model):
                             from_currency, to_currency, self.env.company, rec.move_id.invoice_date or rec.move_id.date
                         )
                         rec.debit2 = rec.debit * conversion_rate
-                        _logger.debug ('main curr = from curr and conversion rate %s',conversion_rate)
-                        _logger.debug ('debit2 %s',rec.debit2)
+                        _logger.info ('main curr = from curr and conversion rate %s',conversion_rate)
+                        _logger.info ('debit2 %s',rec.debit2)
 
                     else:
                         conversion_rate = self.env['res.currency']._get_conversion_rate(
                             main_currency, to_currency, self.env.company, rec.move_id.invoice_date or rec.move_id.date
                         )
                         rec.debit2 = rec.debit * conversion_rate
-                        _logger.debug ('main curr <> from curr and conversion rate %s',conversion_rate)
-                        _logger.debug ('debit2 %s',rec.debit2)
+                        _logger.info ('main curr <> from curr and conversion rate %s',conversion_rate)
+                        _logger.info ('debit2 %s',rec.debit2)
 
 
 
