@@ -1,4 +1,6 @@
-from odoo import fields, models, api
+from odoo import fields, models, api, logging
+
+_logger = logging.getLogger(__name__)
 
 
 class AccountMoveLine(models.Model):
@@ -19,19 +21,34 @@ class AccountMoveLine(models.Model):
                 main_currency = self.env.company.currency_id
                 from_currency = rec.currency_id
                 to_currency = self.env.company.currency_id2
+
+                _logger.debug ('debit on rec %s',rec)
+                _logger.debug ('main currency %s',main_currency)
+                _logger.debug ('from currency %s',from_currency)
+                _logger.debug ('to currency %s',to_currency)
+  
                 if from_currency.id == to_currency.id:
                     rec.debit2 = abs(rec.amount_currency)
+                    _logger.debug ('from curr = to currency debit2 %s',debit2)
+
                 else:
                     if main_currency.id == from_currency.id:
                         conversion_rate = self.env['res.currency']._get_conversion_rate(
                             from_currency, to_currency, self.env.company, rec.move_id.invoice_date or rec.move_id.date
                         )
                         rec.debit2 = rec.debit * conversion_rate
+                        _logger.debug ('main curr = from curr and conversion rate %s',conversion_rate)
+                        _logger.debug ('debit2 %s',debit2)
+
                     else:
                         conversion_rate = self.env['res.currency']._get_conversion_rate(
                             main_currency, to_currency, self.env.company, rec.move_id.invoice_date or rec.move_id.date
                         )
                         rec.debit2 = rec.debit * conversion_rate
+                        _logger.debug ('main curr <> from curr and conversion rate %s',conversion_rate)
+                        _logger.debug ('debit2 %s',debit2)
+
+
 
     @api.depends('credit', 'company_currency_id2', 'currency_id')
     def _compute_credit2(self):
