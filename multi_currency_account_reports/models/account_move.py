@@ -5,11 +5,9 @@ class AccountMoveLine(models.Model):
     _inherit = 'account.move.line'
 
     company_currency_id2 = fields.Many2one(string='Second Company Currency', related='company_id.currency_id2',
-                                          readonly=True, store=True)
-    debit2 = fields.Monetary(string='Debit2', compute='_compute_debit2', currency_field='company_currency_id2',
-                             store=True)
-    credit2 = fields.Monetary(string='Credit2', compute='_compute_credit2', currency_field='company_currency_id2',
-                             store=True)
+                                          readonly=True)
+    debit2 = fields.Monetary(string='Debit2', compute='_compute_debit2', currency_field='company_currency_id2')
+    credit2 = fields.Monetary(string='Credit2', compute='_compute_credit2', currency_field='company_currency_id2')
 
     @api.depends('debit', 'company_currency_id2', 'currency_id')
     def _compute_debit2(self):
