@@ -6,13 +6,16 @@ class AccountMoveLine(models.Model):
 
     company_currency_id2 = fields.Many2one(string='Second Company Currency', related='company_id.currency_id2',
                                           readonly=True)
-    debit2 = fields.Monetary(string='Debit2', compute='_compute_debit2', currency_field='company_currency_id2',default=0)
-    credit2 = fields.Monetary(string='Credit2', compute='_compute_credit2', currency_field='company_currency_id2', default=0)
+    conversion_rate = fields.Float(string='Conversion Rate', compute='_compute_conversion_rate')
+    debit2 = fields.Monetary(string='Debit2', currency_field='company_currency_id2')
+    credit2 = fields.Monetary(string='Credit2', currency_field='company_currency_id2')
 
-    @api.depends('debit', 'company_currency_id2', 'currency_id')
-    def _compute_debit2(self):
+    @api.depends('debit', 'credit', 'company_currency_id2', 'currency_id')
+    def _compute_conversion_rate(self):
         for rec in self:
-            rec.debit2 = False
+            rec.debit2 = 0
+            rec.credit2 = 0
+            rec.conversion_rate = 0
             if rec.debit and rec.company_currency_id2 and rec.currency_id and (rec.move_id.invoice_date or rec.move_id.date):
                 main_currency = self.env.company.currency_id
                 from_currency = rec.currency_id
@@ -30,12 +33,8 @@ class AccountMoveLine(models.Model):
                             main_currency, to_currency, self.env.company, rec.move_id.invoice_date or rec.move_id.date
                         )
                         rec.debit2 = rec.debit * conversion_rate
-
-    @api.depends('credit', 'company_currency_id2', 'currency_id')
-    def _compute_credit2(self):
-        for rec in self:
-            rec.credit2 = False
-            if rec.company_currency_id2 and rec.credit and rec.currency_id and (rec.move_id.invoice_date or rec.move_id.date):
+                rec.conversion_rate = conversion_rate
+            if rec.credit and rec.company_currency_id2 and rec.currency_id and (rec.move_id.invoice_date or rec.move_id.date):
                 main_currency = self.env.company.currency_id
                 from_currency = rec.currency_id
                 to_currency = self.env.company.currency_id2
@@ -52,4 +51,5 @@ class AccountMoveLine(models.Model):
                             main_currency, to_currency, self.env.company, rec.move_id.invoice_date or rec.move_id.date
                         )
                         rec.credit2 = rec.credit * conversion_rate
-
+                rec.conversion_rate = conversion_rate
+            
