@@ -6,7 +6,7 @@ class AccountMoveLine(models.Model):
 
     company_currency_id2 = fields.Many2one(string='Second Company Currency', related='company_id.currency_id2',
                                           readonly=True)
-    conversion_rate = fields.float(string='Conversion Rate', compute='_compute_conversion_rate')
+    conversion_rate = fields.decimal(string='Conversion Rate', compute='_compute_conversion_rate')
     debit2 = fields.Monetary(string='Debit2', currency_field='company_currency_id2')
     credit2 = fields.Monetary(string='Credit2', currency_field='company_currency_id2')
 
