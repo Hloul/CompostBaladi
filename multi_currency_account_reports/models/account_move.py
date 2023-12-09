@@ -54,3 +54,4 @@ class AccountMoveLine(models.Model):
                         )
                         rec.credit2 = rec.credit * conversion_rate
             _logger.info('credit2 = %s', rec.credit2)
+            rec.conversion_rate = conversion_rate
