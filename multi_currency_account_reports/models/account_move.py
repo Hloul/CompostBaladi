@@ -6,8 +6,8 @@ class AccountMoveLine(models.Model):
 
     company_currency_id2 = fields.Many2one(string='Second Company Currency', related='company_id.currency_id2',
                                           readonly=True)
-    debit2 = fields.Monetary(string='Debit2', compute='_compute_debit2', currency_field='company_currency_id2')
-    credit2 = fields.Monetary(string='Credit2', compute='_compute_credit2', currency_field='company_currency_id2')
+    debit2 = fields.Monetary(string='Debit2', compute='_compute_debit2', currency_field='company_currency_id2',default=0)
+    credit2 = fields.Monetary(string='Credit2', compute='_compute_credit2', currency_field='company_currency_id2', default=0)
 
     @api.depends('debit', 'company_currency_id2', 'currency_id')
     def _compute_debit2(self):
