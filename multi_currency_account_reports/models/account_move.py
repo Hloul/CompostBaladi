@@ -15,7 +15,7 @@ class AccountMoveLine(models.Model):
         for rec in self:
             rec.debit2 = 0
             rec.credit2 = 0
-            rec.conversion_rate = 0
+            conversion_rate = 1
             if rec.debit and rec.company_currency_id2 and rec.currency_id and (rec.move_id.invoice_date or rec.move_id.date):
                 main_currency = self.env.company.currency_id
                 from_currency = rec.currency_id
