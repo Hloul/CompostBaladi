@@ -21,7 +21,7 @@ class AccountMoveLine(models.Model):
                 from_currency = rec.currency_id
                 to_currency = self.env.company.currency_id2
                 if from_currency.id == to_currency.id:
-                    conversion_rare = 1
+                    conversion_rate = 1
                     rec.debit2 = abs(rec.amount_currency)
                 else:
                     if main_currency.id == from_currency.id:
@@ -40,7 +40,7 @@ class AccountMoveLine(models.Model):
                 from_currency = rec.currency_id
                 to_currency = self.env.company.currency_id2
                 if from_currency.id == to_currency.id:
-                    conversion_rare = 1
+                    conversion_rate = 1
                     rec.credit2 = abs(rec.amount_currency)
                 else:
                     if main_currency.id == from_currency.id:
